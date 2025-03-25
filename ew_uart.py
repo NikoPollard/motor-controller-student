@@ -21,7 +21,7 @@ uart = UARTService()
 advertisement = ProvideServicesAdvertisement(uart)
 
 def setup(name):
-    ble.name = "morris-ble"
+    ble.name = name
 
 def connect():
     ble.start_advertising(advertisement)
