@@ -64,6 +64,8 @@ def write_rpms(rpms):
 #  2. For each motor, Be sure the potential change is between 0 and 1 
 #  3. For each motor, change the throttle value by the appropriate parameter
 def handle_throttle(mtr1_increase, mtr2_increase):
+    if motor1.throttle == None: motor1.throttle = 0
+    if motor2.throttle == None: motor2.throttle = 0
     mtr1_pot_change = motor1.throttle + mtr1_increase
     mtr2_pot_change = motor2.throttle + mtr2_increase
     if mtr1_pot_change > 1: mtr1_pot_change = 1
@@ -96,6 +98,25 @@ while True:
             if data:
                 text = data.decode("utf-8").strip()
                 print("Text Sent: ", text)
+                button = ua.button_press(data)
+                if button == "UP":
+                    handle_throttle(0.1, 0.1)
+                    continue
+                elif button == "DOWN":
+                    handle_throttle(-0.1, -0.1)
+                    continue
+                elif button == "LEFT":
+                    handle_throttle(0.1, -0.1)
+                    continue
+                elif button == "RIGHT":
+                    handle_throttle(-0.1, 0.1)
+                    continue
+                elif button == "1":
+                    stop()
+                    continue
+                elif button == "2":
+                    coast()
+                    continue
                 # w go faster, s slow down, a left motor increase,
                 # d right motor increase, r stop
                 if text and text == "w":
@@ -108,8 +129,12 @@ while True:
                     handle_throttle(-0.1, -0.1)
                 elif text and text == "a":
                     handle_throttle(0.1, -0.1)
+                elif text and text == "aa":
+                    handle_throttle(2, -2)
                 elif text and text == "d":
                     handle_throttle(-0.1, 0.1)
+                elif text and text == "dd":
+                    handle_throttle(-2, 2)
                 elif text and text == "c":
                     coast()
                 elif text and text == "r":
